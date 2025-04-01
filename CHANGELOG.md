@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Tool annotations support for providing hints about tool behavior (readOnlyHint, destructiveHint, etc.)
+- Comprehensive Prompts Feature implementation following MCP specification
+- Base64 validation for image content to ensure MCP compliance
+- New flexible API for the `messages` method supporting both hash and array inputs
+- Prompt ERB template support for structured data (JSON/XML)
+- Flexible API for the `messages` method with improved content type handling
+- Extensive documentation and examples for prompt usage
 
 ## [1.5.0] - 2025-06-01
 ### Added
@@ -55,7 +61,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent AuthenticatedRackMiddleware from blocking other rails routes[#35 @JulianPasquale](https://github.com/yjacquin/fast-mcp/pull/35)
 - Stop Forcing reconnections after 30 pings [#42 @zoedsoupe](https://github.com/yjacquin/fast-mcp/pull/42)
 
-
 ## [1.1.0] - 2025-04-13
 ### Added
 - Security enhancement: Added DNS rebinding protection by validating Origin headers [#32 @yjacquin](https://github.com/yjacquin/fast-mcp/pull/32/files)
@@ -84,7 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Namespace consistency correction (FastMCP -> FastMcp) throughout the codebase
 
 ### Improved
-- ⚠️ [Breaking] Resource content declaration changes
+- [Breaking] Resource content declaration changes
   - Now resources implement `content` over `default_content`
   - `content` is dynamically called when calling a resource, this implies we can declare dynamic resource contents like:
   ```ruby

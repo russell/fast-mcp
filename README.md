@@ -28,12 +28,12 @@ Fast MCP solves all these problems by providing a clean, Ruby-focused implementa
 
 - 🛠️ **Tools API** - Let AI models call your Ruby functions securely, with in-depth argument validation through [Dry-Schema](https://github.com/dry-rb/dry-schema).
 - 📚 **Resources API** - Share data between your app and AI models
+- 💬 **Prompt Handling** - Create structured message templates for LLM interactions
 - 🔄 **Multiple Transports** - Choose from STDIO, HTTP, or SSE based on your needs
 - 🧩 **Framework Integration** - Works seamlessly with Rails, Sinatra or any Rack app.
 - 🔒 **Authentication Support** - Secure your AI-powered endpoints with ease
 - 🚀 **Real-time Updates** - Subscribe to changes for interactive applications
 - 🎯 **Dynamic Filtering** - Control tool/resource access based on request context (permissions, API versions, etc.)
-
 
 ## 💎 What Makes FastMCP Great
 ```ruby
@@ -109,7 +109,7 @@ Control which tools and resources are available based on request context:
 class AdminTool < FastMcp::Tool
   tags :admin, :dangerous
   description "Perform admin operations"
-  
+
   def call
     # Admin only functionality
   end
@@ -118,7 +118,7 @@ end
 # Filter tools based on user permissions
 server.filter_tools do |request, tools|
   user_role = request.params['role']
-  
+
   case user_role
   when 'admin'
     tools # Admins see all tools
@@ -269,6 +269,29 @@ end
 # Register the resource with the server
 server.register_resource(StatisticsResource)
 
+# Define a prompt by inheriting from FastMcp::Prompt
+class GreetingPrompt < FastMcp::Prompt
+  prompt_name 'greeting'
+  description 'A friendly greeting prompt'
+
+  arguments do
+    required(:name).filled(:string).description("User's name")
+    optional(:time_of_day).filled(:string).description("Morning, afternoon, or evening")
+  end
+
+  def call(name:, time_of_day: nil)
+    greeting = time_of_day ? "Good #{time_of_day}" : "Hello"
+
+    messages(
+      assistant: "#{greeting}, #{name}! How can I help you today?",
+      user: "I'd like some assistance with Ruby programming."
+    )
+  end
+end
+
+# Register the prompt with the server
+server.register_prompt(GreetingPrompt)
+
 # Start the server
 server.start
 ```
@@ -338,6 +361,7 @@ Add your server to your Claude Desktop configuration at:
 ```
 
 ## How to add a MCP server to Claude, Cursor, or other MCP clients?
+
 Please refer to [configuring_mcp_clients](docs/configuring_mcp_clients.md)
 
 ## 📊 Supported Specifications
@@ -347,6 +371,7 @@ Please refer to [configuring_mcp_clients](docs/configuring_mcp_clients.md)
 | ✅ **JSON-RPC 2.0** | Full implementation for communication |
 | ✅ **Tool Definition & Calling** | Define and call tools with rich argument types |
 | ✅ **Resource & Resource Templates Management** | Create, read, update, and subscribe to resources |
+| ✅ **Prompt Handling** | Create structured message templates for LLM interactions |
 | ✅ **Transport Options** | STDIO, HTTP, and SSE for flexible integration |
 | ✅ **Framework Integration** | Rails, Sinatra, Hanami, and any Rack-compatible framework |
 | ✅ **Authentication** | Secure your AI endpoints with token authentication |
@@ -398,6 +423,7 @@ FastMcp.authenticated_rack_middleware(app,
 - [🌐 Sinatra Integration](docs/sinatra_integration.md)
 - [📚 Resources](docs/resources.md)
 - [🛠️ Tools](docs/tools.md)
+- [💬 Prompts](docs/prompts.md)
 - [🔒 Security](docs/security.md)
 - [🎯 Dynamic Filtering](docs/filtering.md)
 
@@ -408,6 +434,7 @@ Check out the [examples directory](examples) for more detailed examples:
 - **🔨 Basic Examples**:
   - [Simple Server](examples/server_with_stdio_transport.rb)
   - [Tool Examples](examples/tool_examples.rb)
+  - [Prompt Examples](examples/prompts)
 
 - **🌐 Web Integration**:
   - [Rack Middleware](examples/rack_middleware.rb)

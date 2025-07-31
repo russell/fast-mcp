@@ -160,11 +160,14 @@ FastMcp.mount_in_rails(
     # FastMcp will automatically discover and register:
     # - All classes that inherit from ApplicationTool (which uses ActionTool::Base)
     # - All classes that inherit from ApplicationResource (which uses ActionResource::Base)
+    # - All classes that inherit from ApplicationPrompt (which uses ActionPrompt::Base)
     server.register_tools(*ApplicationTool.descendants)
     server.register_resources(*ApplicationResource.descendants)
-    # alternatively, you can register tools and resources manually:
+    server.register_prompts(*ApplicationPrompt.descendants)
+    # alternatively, you can register tools, resources, and prompts manually:
     # server.register_tool(MyTool)
     # server.register_resource(MyResource)
+    # server.register_prompt(MyPrompt)
   end
 end
 ```
@@ -175,6 +178,7 @@ The install script will also:
 - add app/resources/sample_resource.rb
 - add ApplicationTool to inherit from
 - add ApplicationResource to inherit from as well
+- add ApplicationPrompt to inherit from
 
 #### Rails-friendly class naming conventions
 
@@ -216,6 +220,11 @@ end
 # app/resources/application_resource.rb
 class ApplicationResource < ActionResource::Base
   # Base methods for all resources
+end
+
+# app/prompts/application_prompt.rb
+class ApplicationPrompt < ActionPrompt::Base
+  # Base methods for all prompts
 end
 ```
 

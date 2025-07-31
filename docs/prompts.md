@@ -270,7 +270,7 @@ class XmlPrompt < FastMcp::Prompt
 
   arguments do
     required(:document_type).filled(:string).description("Type of XML document")
-    required(:elements).array.description("Elements to include")
+    required(:elements).array(:hash).description("Elements to include")
     optional(:attributes).hash.description("Document attributes")
   end
 
